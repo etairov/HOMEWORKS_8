@@ -75,4 +75,3 @@ Console.WriteLine($"Матрица- произведение: ");
 Console.WriteLine();
 
 PrintMatrix(multi);
-SDFSDF

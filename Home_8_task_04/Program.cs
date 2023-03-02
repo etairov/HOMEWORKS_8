@@ -9,70 +9,58 @@
 */
 //--------------------------------------
 
-int[,] InitMatrix(int rows, int columns)
+int[,,] InitMatrix(int rows, int columns, int strings)
 {
-    int[,] matrix = new int[rows, columns];
+    int[,,] matrix = new int[rows, columns, strings];
     Random rnd = new Random();
 
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < columns; j++)
         {
-            matrix[i, j] = rnd.Next(1, 10);
+            for (int k = 0; k < strings; k++)
+            {
+                matrix[i, j, k] = rnd.Next(10, 99);
+            }
         }
     }
-
     return matrix;
 }
 
-void PrintMatrix(int[,] matrix)
+void PrintMatrix(int[,,] matrix)
 {
     for (int i = 0; i < matrix.GetLength(0); i++)
     {
         for (int j = 0; j < matrix.GetLength(1); j++)
         {
-            Console.Write($"({matrix[i, j]}) ");
-        }
-
-        Console.WriteLine();
-    }
-}
-
-//------------------------------------
-
-int[,] Multiplication(int[,] matrix, int[,] matrixTwo)
-{
-    int[,] multi = new int[matrix.GetLength(0), matrixTwo.GetLength(1)];
-
-    for (int i = 0; i < matrix.GetLength(0); i++)
-    {
-        for (int j = 0; j < matrixTwo.GetLength(1); j++)
-        {
-            for (int k = 0; k < matrixTwo.GetLength(0); k++)
+            Console.Write("\n");
+            for (int k = 0; k < matrix.GetLength(2); k++)
             {
-                multi[i, j] += matrix[i, k] * matrixTwo[k, j];
+                Console.Write($"{matrix[i, j, k]}{(j, k, i)} ");
             }
         }
     }
-    return multi;
 }
 
-//------------------------------------
+void CheckDouble(int[,,] matrix)
+{
+    Random rnd = new Random();
 
-int[,] matrix = InitMatrix(2, 2);
-int[,] matrixTwo = InitMatrix(2, 2);
-int[,] multi = Multiplication(matrix, matrixTwo);
+    Queue<int> que = new Queue<int>(Enumerable.Range(10, 90).OrderBy(_ => rnd.NextDouble()));
 
-Console.WriteLine($"Заданы матрицы: ");
-Console.WriteLine();
+    for (int i = 0; i < matrix.GetLength(0); ++i)
+    {
+        for (int j = 0; j < matrix.GetLength(1); ++j)
+        {
+            for (int k = 0; k < matrix.GetLength(2); k++)
+            {
+                matrix[i, j, k] = que.Dequeue();
+            }
+        }
+    }
+}
 
+int[,,] matrix = InitMatrix(2, 2, 2);
+
+CheckDouble(matrix);
 PrintMatrix(matrix);
-Console.WriteLine();
-
-PrintMatrix(matrixTwo);
-Console.WriteLine();
-
-Console.WriteLine($"Матрица- произведение: ");
-Console.WriteLine();
-
-PrintMatrix(multi);
